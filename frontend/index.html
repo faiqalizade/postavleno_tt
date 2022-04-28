@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Redis</title>
+</head>
+<body>
+<ul id="list">
+<!--    <li>${key}: ${data.data[key]} <a href="#" data-key="${key}" class=‘remove’>delete</a></li>-->
+</ul>
+</body>
+</html>
+<script>
+    fetch("http://127.0.0.1:3000/api/redis")
+        .then(response => response.json())
+        .then(data => {
+            if (!data.status) {
+                alert(data.data.message);
+                return;
+            }
+
+            let resultHTML = "";
+            for (const key in data.data) {
+                resultHTML += `<li>${key}: ${data.data[key]} <a href="#" data-key="${key}" class=‘remove’>delete</a></li>`;
+            }
+            let listDOM = document.getElementById("list");
+            listDOM.innerHTML = resultHTML;
+        });
+
+    document.addEventListener('click', function (e) {
+        const key = e.target.getAttribute('data-key');
+        fetch("http://127.0.0.1:3000/api/redis/" + key, {method: 'DELETE'})
+            .then(response => response.json())
+            .then(data => {
+                if (!data.status) {
+                    alert(data.data.message);
+                    return;
+                }
+                alert("Deleted Successfully");
+                e.target.parentNode.remove();
+            })
+    })
+</script>
