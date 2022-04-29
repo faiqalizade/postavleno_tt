@@ -29,6 +29,9 @@
 
     document.addEventListener('click', function (e) {
         const key = e.target.getAttribute('data-key');
+        if (!key) {
+            return;
+        }
         fetch("http://127.0.0.1:3000/api/redis/" + key, {method: 'DELETE'})
             .then(response => response.json())
             .then(data => {
