@@ -26,7 +26,7 @@ class Redis implements IDriver
         return $this->client->del($key);
     }
 
-    function all(): array|bool|null
+    public function all(): array|bool|null
     {
         $keys = $this->client->keys("*");
         if (!$keys) {
